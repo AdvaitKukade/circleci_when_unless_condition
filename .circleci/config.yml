@@ -1,0 +1,26 @@
+version: 2.1
+jobs:
+  myjob:
+    parameters:
+      preinstall-foo:
+        type: boolean
+        default: false
+    machine: true
+    steps:
+      - run: echo "Pre install is << parameters.preinstall-foo >>"
+      - when:
+          condition: << parameters.preinstall-foo >>
+          steps:
+            - run: echo "Pre install"
+      - unless:
+          condition: << parameters.preinstall-foo >>
+          steps:
+            - run: echo "dont preinstall"
+
+workflows:
+  workflow
+    jobs: 
+      - myjob:
+          preinstall-foo: false
+      - myjob: 
+          preinstall-foo: true
